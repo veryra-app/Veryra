@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veryra — Dancer Support</title>
+<meta name="description" content="Veryra helps dancers track goals, ask a coach, and care for their mindset.">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">✨ Veryra</div>
+  <div id="userBar" class="user-bar hidden">
+    <span id="userEmail"></span>
+    <button id="signOutBtn" class="btn small ghost">Sign out</button>
+  </div>
+</header>
+
+<main>
+  <!-- CONFIG WARNING -->
+  <div id="configWarning" class="banner warning hidden">
+    This site is not connected yet. Open <strong>app.js</strong> and paste your Supabase
+    Project URL and Publishable key into the two spots marked PASTE HERE, then upload app.js again.
+  </div>
+
+  <!-- AUTH -->
+  <section id="authSection" class="card auth-card hidden">
+    <h1>Welcome to Veryra 💗</h1>
+    <p class="sub">Track your dance goals, ask a coach, and take care of your mindset — saved to your own account.</p>
+    <label>Email
+      <input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com">
+    </label>
+    <label>Password
+      <input id="authPassword" type="password" autocomplete="current-password" placeholder="Your password">
+    </label>
+    <div class="row">
+      <button id="signInBtn" class="btn primary">Sign in</button>
+      <button id="signUpBtn" class="btn">Create account</button>
+    </div>
+    <p id="authMessage" class="message"></p>
+    <p class="tiny">New here? Create an account, then check your email to confirm it before signing in.</p>
+  </section>
+
+  <!-- APP -->
+  <section id="appSection" class="hidden">
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="goals">🌱 My Goals</button>
+      <button class="tab-btn" data-tab="coach">💬 Ask a Coach</button>
+      <button class="tab-btn" data-tab="mindset">💛 Mindset</button>
+    </nav>
+
+    <!-- GOALS TAB -->
+    <div id="tab-goals" class="tab-panel">
+      <div class="goals-header">
+        <h2>✨ My Goals ✨</h2>
+        <div class="pills">
+          <span class="pill" id="growingCount">🌱 Growing: 0</span>
+          <span class="pill" id="achievedCount">🏆 Achieved: 0</span>
+        </div>
+      </div>
+
+      <div class="card dream-card">
+        <h3>💭 Dream up a new goal</h3>
+        <input id="goalTitle" class="pill-input" type="text" placeholder="My goal is... (example: clean double pirouette)">
+        <div class="chips" id="categoryChips">
+          <button class="chip" data-cat="jumps">🦘 Jumps</button>
+          <button class="chip" data-cat="turns">🌀 Turns</button>
+          <button class="chip" data-cat="flexibility">🌸 Flexibility</button>
+          <button class="chip" data-cat="strength">💪 Strength</button>
+          <button class="chip" data-cat="choreography">🎶 Choreography</button>
+          <button class="chip selected" data-cat="other">✨ Other</button>
+        </div>
+        <div class="row wrap">
+          <label class="grow">Target date
+            <input id="goalDate" type="date">
+          </label>
+          <label class="grow">Note (optional)
+            <input id="goalNote" type="text" placeholder="Why this goal matters to me">
+          </label>
+        </div>
+        <button id="addGoalBtn" class="btn primary big">✨ Add my goal!</button>
+        <p id="goalMessage" class="message"></p>
+      </div>
+
+      <div id="goalsList"></div>
+    </div>
+
+    <!-- COACH TAB -->
+    <div id="tab-coach" class="tab-panel hidden">
+      <div class="card">
+        <h2>💬 Ask a Coach</h2>
+        <p class="sub">Ask anything about dance technique. Answers pop up right away in the middle, with steps, drills, and video links.</p>
+        <div class="chips">
+          <button class="chip coach-chip">How do I stop falling out of my pirouettes?</button>
+          <button class="chip coach-chip">How can I get a higher grand jeté?</button>
+          <button class="chip coach-chip">How do I get my splits?</button>
+          <button class="chip coach-chip">I keep forgetting choreography, help!</button>
+        </div>
+        <div class="row">
+          <input id="coachQuestion" class="grow pill-input" type="text" placeholder="Type your dance question...">
+          <button id="askCoachBtn" class="btn primary">Ask</button>
+        </div>
+      </div>
+      <h3>Past questions</h3>
+      <div id="coachHistory"></div>
+    </div>
+
+    <!-- MINDSET TAB -->
+    <div id="tab-mindset" class="tab-panel hidden">
+      <div class="card affirm-card">
+        <div class="affirm-label">💛 Today's affirmation</div>
+        <p id="affirmation" class="affirmation"></p>
+      </div>
+
+      <div class="accordion">
+        <button class="acc-head" data-acc="checkin">📝 Today's check-in <span>▾</span></button>
+        <div class="acc-body" id="acc-checkin">
+          <p class="sub">How are you feeling today?</p>
+          <div class="chips" id="moodChips">
+            <button class="chip" data-mood="Great">😄 Great</button>
+            <button class="chip" data-mood="Good">🙂 Good</button>
+            <button class="chip" data-mood="Okay">😐 Okay</button>
+            <button class="chip" data-mood="Tough">😔 Tough</button>
+            <button class="chip" data-mood="Really hard">🥺 Really hard</button>
+          </div>
+          <input id="checkinNote" class="pill-input" type="text" placeholder="A note about today (optional)">
+          <button id="saveCheckinBtn" class="btn primary">Save check-in</button>
+          <p id="checkinMessage" class="message"></p>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <button class="acc-head" data-acc="tools">🌿 Calm-down tools <span>▾</span></button>
+        <div class="acc-body hidden" id="acc-tools">
+          <h4>60-second breathing reset</h4>
+          <p class="sub">Breathe in for 4, hold for 4, out for 4. Follow the circle.</p>
+          <div id="breathCircle" class="breath-circle">Ready</div>
+          <button id="breathBtn" class="btn">Start breathing reset</button>
+          <h4>Bad class day toolkit</h4>
+          <ol class="toolkit">
+            <li>Name it: "Today was a hard class" is a fact, not a verdict on you as a dancer.</li>
+            <li>Write down ONE thing that went a little better than last time — even a tiny thing counts.</li>
+            <li>Ask: what is one small thing I can practise for 5 minutes tomorrow?</li>
+            <li>Rest is training too. Eat, hydrate, and let your body recover.</li>
+            <li>Remember why you started. One class is one page, not the whole story. 💛</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <button class="acc-head" data-acc="history">📖 Your check-ins <span>▾</span></button>
+        <div class="acc-body hidden" id="acc-history">
+          <div id="checkinHistory"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Veryra is for dance practice support and encouragement. It is not medical or mental-health care —
+  if you are hurt or struggling, please talk to a trusted adult, teacher, or professional.</p>
+  <p><a href="#" id="privacyLink">Privacy, in plain words</a></p>
+</footer>
+
+<!-- COACH ANSWER POPUP -->
+<div id="coachModal" class="modal hidden">
+  <div class="modal-box">
+    <button id="coachModalClose" class="modal-close" aria-label="Close">✕</button>
+    <div id="coachModalContent"></div>
+  </div>
+</div>
+
+<!-- PRIVACY POPUP -->
+<div id="privacyModal" class="modal hidden">
+  <div class="modal-box">
+    <button id="privacyModalClose" class="modal-close" aria-label="Close">✕</button>
+    <h3>Privacy, in plain words</h3>
+    <p>When you create an account, Veryra saves your goals, progress notes, coach questions, and mindset
+    check-ins under your account only. Other users cannot see your rows — the database is set so each
+    signed-in person can only read and change their own data.</p>
+    <p>Do not put private personal details (your full name, address, school, or passwords) in goals or notes.
+    You can delete your goals and check-ins in the app at any time.</p>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
