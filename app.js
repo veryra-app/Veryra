@@ -5,7 +5,7 @@
 // 1) Your Supabase Project URL      (looks like https://xxxxx.supabase.co)
 // 2) Your Supabase Publishable key  (starts with sb_publishable_ )
 // Do NOT paste the secret key / service_role key anywhere in this file.
-const SUPABASE_URL = "https://iagkqmmxkxrfbhplerkb.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://iagkqmmxkxrfbhplerkb.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2b3g8Q_5GhW9qbs5SuiFPw_clNNnsGN";
 // ============================================================
 
