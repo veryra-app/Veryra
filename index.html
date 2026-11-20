@@ -38,12 +38,33 @@
       <button id="signInBtn" class="btn primary">Sign in</button>
       <button id="signUpBtn" class="btn">Create account</button>
     </div>
+    <p class="tiny" style="margin-top:8px"><a href="#" id="forgotLink">Forgot your password?</a></p>
     <p id="authMessage" class="message"></p>
     <p class="tiny">New here? Create an account, then check your email to confirm it before signing in.</p>
+    <hr style="border:none;border-top:2px dashed var(--line);margin:16px 0">
+    <button id="guestBtn" class="btn big ghost">👀 Continue as guest</button>
+    <p class="tiny" style="margin-top:8px">⚠️ <strong>Guest mode warning:</strong> you can try everything, but <strong>nothing is saved</strong>. Your goals, practice notes, and check-ins live only in this tab — close it and they're gone. Sign in or create a free account above to keep them.</p>
+  </section>
+
+  <!-- RESET PASSWORD -->
+  <section id="resetSection" class="card auth-card hidden">
+    <h1>Set a new password 🔑</h1>
+    <p class="sub">Type a new password for your Veryra account.</p>
+    <label>New password
+      <input id="newPassword" type="password" autocomplete="new-password" placeholder="New password">
+    </label>
+    <div class="row">
+      <button id="setPasswordBtn" class="btn primary">Save new password</button>
+    </div>
+    <p id="resetMessage" class="message"></p>
   </section>
 
   <!-- APP -->
   <section id="appSection" class="hidden">
+    <div id="guestBanner" class="banner warning hidden">
+      👀 You're using Veryra as a <strong>guest</strong> — nothing is being saved. Close this tab and your goals, notes, and check-ins are gone.
+      <a href="#" id="guestSignInLink"><strong>Sign in or create a free account</strong></a> to keep them.
+    </div>
     <nav class="tabs">
       <button class="tab-btn active" data-tab="goals">🌱 My Goals</button>
       <button class="tab-btn" data-tab="coach">💬 Ask a Coach</button>
@@ -63,6 +84,7 @@
       <div class="card dream-card">
         <h3>💭 Dream up a new goal</h3>
         <input id="goalTitle" class="pill-input" type="text" placeholder="My goal is... (example: clean double pirouette)">
+        <p id="goalTitleWarning" class="field-warning hidden"></p>
         <div class="chips" id="categoryChips">
           <button class="chip" data-cat="jumps">🦘 Jumps</button>
           <button class="chip" data-cat="turns">🌀 Turns</button>
@@ -124,6 +146,7 @@
             <button class="chip" data-mood="Tough">😔 Tough</button>
             <button class="chip" data-mood="Really hard">🥺 Really hard</button>
           </div>
+          <p id="moodWarning" class="field-warning hidden">⚠️ Pick how you're feeling first — tap one of the mood faces above.</p>
           <input id="checkinNote" class="pill-input" type="text" placeholder="A note about today (optional)">
           <button id="saveCheckinBtn" class="btn primary">Save check-in</button>
           <p id="checkinMessage" class="message"></p>
@@ -180,6 +203,8 @@
     <p>When you create an account, Veryra saves your goals, progress notes, coach questions, and mindset
     check-ins under your account only. Other users cannot see your rows — the database is set so each
     signed-in person can only read and change their own data.</p>
+    <p>Guest mode keeps nothing: if you use Veryra without an account, your goals and notes live only
+    in the open tab and disappear when you close it.</p>
     <p>Do not put private personal details (your full name, address, school, or passwords) in goals or notes.
     You can delete your goals and check-ins in the app at any time.</p>
   </div>
