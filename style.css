@@ -82,3 +82,7 @@ textarea.note-area{min-height:84px;line-height:1.5;resize:vertical}
   .tab-btn{min-width:104px;font-size:15px;padding:11px 8px}
   .btn.big{font-size:17px}
 }
+/* Keep long user text inside its box instead of overflowing */
+.goal-card strong,.goal-card .sub,.timeline li,.checkin-row span,.coach-row span{overflow-wrap:anywhere;word-break:break-word}
+.goal-top>div,.goal-top>div>div{min-width:0}
+.status-pill{flex-shrink:0}
